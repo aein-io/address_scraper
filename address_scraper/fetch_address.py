@@ -3,7 +3,7 @@ from address import Address
 from payload import payload, headers, url
 
 
-def fetch_address(state_code: str, limit: int = payload["limit"], api_key: str = headers["X-RapidAPI-Key"], payload: dict = payload, headers: dict = headers, url: str = url) -> list:
+def fetch_address(state_code: str, limit: int = payload["limit"], offset: int = payload["offset"], api_key: str = headers["X-RapidAPI-Key"], payload: dict = payload, headers: dict = headers, url: str = url) -> list:
     """
     Fetches addresses from the API.
 
@@ -11,8 +11,8 @@ def fetch_address(state_code: str, limit: int = payload["limit"], api_key: str =
         state (string): The state input by the user.
         limit (int): Limit for the API request.
         api_key (string): The API key for the request.
-        payload (dictionary): API request payload. 
-        headers (dictionary): API request headers.
+        payload (dict): API request payload. 
+        headers (dict): API request headers.
         url (string): API request url.
 
     Returns: 
@@ -27,6 +27,9 @@ def fetch_address(state_code: str, limit: int = payload["limit"], api_key: str =
 
     if limit != payload["limit"]:
         payload["limit"] = limit
+
+    if offset != payload["offset"]:
+        payload["offset"] = offset
 
     try:
         response: requests.Response = requests.post(
@@ -61,9 +64,9 @@ def parse_address(data: dict) -> dict:
     Returns: 
         dict: A dictionary that stores the details of the address.
     """
-    location = data["location"]
-    address = location["address"]
-    coordinate = address["coordinate"]
+    location: dict = data["location"]
+    address: dict = location["address"]
+    coordinate: dict = address["coordinate"]
 
     for key, value in address.items():
         if value is None:
@@ -94,7 +97,7 @@ def parse_address(data: dict) -> dict:
     return address
 
 
-def generate_coords(lat, lon):
+def generate_coords(lat: float, lon: float) -> str:
     """
     Combines latitude and longitude into coordinates.
 
