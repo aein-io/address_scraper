@@ -16,26 +16,26 @@ def scraper(args=None):
     if not args:
         args = initialize.setup_args()
 
+    logging_level = logging.DEBUG if args.verbose else logging.INFO
+    logger = initialize.Logger(__name__, logging_level).logger
+
     state = validate_state.get_state_code(args.state)
     if not state:
         raise ValueError("Invalid state or state code")
 
-    requests = args.requests
-    limit = args.limit
-
-    logging_level = logging.DEBUG if args.verbose else logging.INFO
-    logger = initialize.Logger(__name__, logging_level).logger
-
-    logger.info(f"Scraping {state} for {requests} addresses")
+    requests: int = args.requests
+    limit: int = args.limit
 
     routines = limit/requests  # the number of routines to run
 
-    offset = requests
-    headerflag = True
+    offset: int = requests
+    headerflag: bool = True
+
+    logger.info(f"Scraping {state} for {requests} addresses")
     while routines > 0:
-        addresses = []
-        for address in fetch_address(state, requests, offset=offset):
-            addresses.append(address)
+
+        addresses = [address for address in fetch_address(
+            state, requests, offset=offset)]
 
         csv_file = generate_csv(addresses, flag=headerflag)
         logger.info(f"Generated {csv_file} with {requests} addresses")

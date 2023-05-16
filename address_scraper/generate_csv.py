@@ -24,11 +24,11 @@ def generate_csv(addresses: list[Address], flag=True) -> StringIO:
         raise e
 
     csv_writer: DictWriter = DictWriter(file, fieldnames=fieldnames)
+
     if flag:
         csv_writer.writeheader()
 
-    for address in addresses:
-        csv_writer.writerow(address.dict())
+    [csv_writer.writerow(address.dict()) for address in addresses]
 
     file.seek(0)
     return file

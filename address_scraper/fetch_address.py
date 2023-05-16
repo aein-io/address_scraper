@@ -109,3 +109,4 @@ def generate_coords(lat: float, lon: float) -> str:
         str: A string that contains the coordinates.
     """
     return f"{lat},{lon}"
+
