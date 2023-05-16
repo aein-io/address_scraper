@@ -7,11 +7,22 @@ from generate_csv import generate_csv
 import initialize
 import validate_state
 
+# TODO: Tanggalin ba to
 # Path: address_scraper/scraper.py
 
 
 def scraper(args=None):
-    """CLI Program that scrapes addresses from the web given a state """
+    """
+    CLI Program that scrapes addresses from the web given a state.
+
+    Args:
+        #TODO: Add type and desc
+        args (_type_, optional): _description_. Defaults to None.
+
+    Raises:
+        #TODO: Add desc
+        ValueError: _description_
+    """
 
     if not args:
         args = initialize.setup_args()

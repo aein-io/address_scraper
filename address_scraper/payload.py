@@ -1,3 +1,15 @@
+"""
+This module provides a variable and dictionaries for storing information needed for calling the API requests.
+
+The module contains the following variable:
+- 'url': Stores the API request url.
+
+The module contains the following dictionaries:
+- 'payload': Stores the API request payload.
+- 'headers': Stores the API request headers.
+    
+"""
+
 url = "https://realty-in-us.p.rapidapi.com/properties/v3/list"
 
 payload = {

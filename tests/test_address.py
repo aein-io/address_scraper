@@ -37,7 +37,6 @@ address = Address(**valid)
 
 
 def test_address():
-
     assert address.city == "San Francisco"
     assert address.line == "1600 Pennsylvania Ave NW"
     assert address.street_name == "Pennsylvania"

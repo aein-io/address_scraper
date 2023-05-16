@@ -1,3 +1,7 @@
+"""
+This module provides a dictionary that stores all the US States with their state code as the keys. 
+"""
+
 states = {
     'AK': 'Alaska',
     'AL': 'Alabama',

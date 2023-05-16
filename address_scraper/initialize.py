@@ -3,8 +3,19 @@ import logging
 
 DEFAULT_LIMIT = 10000
 
+# TODO: @aaron pls add type hints :>
+
 
 class Logger:
+    """
+    #TODO: Add summary
+
+    Attribute:
+        _instance (_type_): #TODO: Add type and desc
+
+    Returns:
+        _type_: #TODO: Add type and desc
+    """
     _instance = None
 
     def __new__(cls, name, level=logging.DEBUG):
@@ -32,10 +43,33 @@ class Logger:
 
 
 def setup_args():
-    """Defines and returns the arguments required by the scraper"""
+    """
+    Defines and returns the arguments required by the scraper.
+    """
 
     def positive(numeric_type):
+        """
+        #TODO: Add summary
+
+        Args:
+            numeric_type (_type_): #TODO: Add type and desc
+
+        Returns:
+            _type_: #TODO: Add type and desc
+        """
         def require_positive(value):
+            """
+            #TODO: Add summary
+
+            Args:
+                value (_type_): #TODO: Add type and desc
+
+            Raises:
+                TypeError: If #TODO: Complete the statement
+
+            Returns:
+                _type_: #TODO: Add type and desc
+            """
             number = numeric_type(value)
             if number <= 0:
                 raise TypeError(f"Number {value} must be positive.")

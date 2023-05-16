@@ -3,23 +3,21 @@ from pydantic import BaseModel
 
 class Address(BaseModel):
     """
-    Address dataclass that corresponds to a US address
+    Address dataclass that corresponds to a US address.
 
-    ...
-
-    Attributes
-    ----------
-    city : str
-    line : str
-    street_name : str
-    street_number : str
-    street_suffix : str
-    country : str
-    postal_code : str
-    state_code : str
-    state : str
-    lat : float
-    lon : float
+    Attributes:
+        city (str): The city of the Address.
+        line (str): The street name, number, and suffix of the Address.
+        street_name (str): The street name of the Address.
+        street_number (str): The street number of the Address.
+        street_suffix (str): The street suffix of the Address.
+        country (str): The country of the Address.
+        postal_code (str): The postal code of the Address.
+        state_code (str): The state code of the Address.
+        state (str): The state of the Address.
+        coordinates (str): The coordinates of the Address.
+        lat (float): The latitude of the Address.
+        lon (float): The longitude of the Address.
     """
 
     city: str
@@ -36,6 +34,14 @@ class Address(BaseModel):
     lon: float
 
     class Config:
+        """
+        Configuration class for #TODO: Complete documentation
+
+        Attributes:
+            strict_types (bool): #TODO: Add desc
+            orm_mode (bool): #TODO: Add desc
+            allow_mutation (bool): #TODO: Add desc
+        """
         strict_types = True
         orm_mode = True
         allow_mutation = False

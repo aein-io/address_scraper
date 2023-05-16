@@ -9,11 +9,12 @@ def fetch_address(state_code: str, limit: int = payload["limit"], offset: int = 
 
     Args:
         state (string): The state input by the user.
-        limit (int): Limit for the API request.
-        api_key (string): The API key for the request.
-        payload (dict): API request payload. 
-        headers (dict): API request headers.
-        url (string): API request url.
+        limit (int, optional): Limit for the API request. Defaults to payload["limit"].
+        offset (int, optional): Offset for the API request. Defaults to payload["offset"].
+        api_key (string, optional): The API key for the request. Defaults to headers["X-RapidApi-Key"].
+        payload (dict, optional): API request payload. Defaults to payload.
+        headers (dict, optional): API request headers. Defaults to headers.
+        url (string, optional): API request url. Defaults to url.
 
     Returns: 
         list: A list of dictionaries that store the addresses.
@@ -109,4 +110,3 @@ def generate_coords(lat: float, lon: float) -> str:
         str: A string that contains the coordinates.
     """
     return f"{lat},{lon}"
-

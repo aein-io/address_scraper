@@ -1,20 +1,16 @@
-# TODO: @aaron
 from csv import DictWriter
 from io import StringIO
 
-from address import Address
 
-
-def generate_csv(addresses: list[Address], flag=True) -> StringIO:
+def generate_csv(addresses: list, flag=True) -> StringIO:
     """
-    Generate a CSV file from a list of addresses
+    Generate a CSV file from a list of addresses.
 
     Args:
-        addresses : list[Address]
-            List of Address objects
+        addresses (list): List of Address objects.
 
     Returns:
-        A reference to the CSV file generated
+        A reference to the CSV file generated.
     """
 
     try:
