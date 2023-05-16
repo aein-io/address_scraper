@@ -56,9 +56,9 @@ def parse_address(data: dict) -> dict:
         "postal_code": location["postal_code"],
         "state_code": location["state_code"],
         "state": location["state"],
-        "coordinates": generate_coords(location["lat"], location["lon"]),
-        "lat": location["lat"],
-        "lon": location["lon"],
+        "coordinates": generate_coords(location["coordinate"]["lat"], location["coordinate"]["lon"]),
+        "lat": location["coordinate"]["lat"],
+        "lon": location["coordinate"]["lon"]
     }
     return details
 
