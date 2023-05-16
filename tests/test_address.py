@@ -53,6 +53,7 @@ def test_address():
 
 
 def test_address_types():
+    # TODO: @aaron validate address types
     with raises(ValidationError):
         Address(**invalid_types)
 
