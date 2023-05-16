@@ -1,7 +1,8 @@
 # TODO: @aaron
-from address import Address
-
 from csv import DictWriter
+import io
+
+from address import Address
 
 
 def generate_csv(addresses: list[Address], filename: str) -> None:
@@ -19,7 +20,7 @@ def generate_csv(addresses: list[Address], filename: str) -> None:
     """
 
     try:
-        file = open(filename, 'w', newline='')
+        file = io.StringIO()
         fieldnames = addresses[0].schema()['properties'].keys()
     except (IndexError, FileNotFoundError) as e:
         raise e
