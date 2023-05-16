@@ -1,7 +1,7 @@
 from states import states
 
 
-def get_state_abbrev(state):
+def get_state_code(state):
     """
     Get the state abbreviation from the state name
     """
