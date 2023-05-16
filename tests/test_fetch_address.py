@@ -1,4 +1,5 @@
 from address_scraper.address_scraper.fetch_address import fetch_address
+from address_scraper.address_scraper.address import Address
 from address_scraper.address_scraper.payload import url, payload, headers
 from unittest.mock import Mock, patch
 
@@ -89,6 +90,8 @@ def test_fetch_address():
 
     with patch("requests.post", return_value=mock_response) as mock_post:
         result = fetch_address(state_code)
+        # convert address object to dict
+        result = [address.dict() for address in result]
 
         mock_post.assert_called_once_with(
             url, json=payload, headers=headers)

@@ -1,4 +1,5 @@
 import requests
+from address import Address
 from payload import payload, headers, url
 
 
@@ -16,8 +17,10 @@ def fetch_address(state_code: str, limit: int = payload["limit"], api_key: str =
 
     Returns: 
         list: A list of dictionaries that store the addresses.
+
     """
-    payload["state_code"] = state_code
+
+    payload["state_code"]: str = state_code
 
     if api_key != headers["X-RapidAPI-Key"]:
         headers["X-RapidAPI-Key"] = api_key
@@ -26,17 +29,26 @@ def fetch_address(state_code: str, limit: int = payload["limit"], api_key: str =
         payload["limit"] = limit
 
     try:
-        response = requests.post(url, json=payload, headers=headers)
+        response: requests.Response = requests.post(
+            url,
+            json=payload,
+            headers=headers
+        )
+        response.raise_for_status()
 
-        data = response.json()
-        results = data["data"]["home_search"]["results"]
+        data: dict = response.json()
+        results: list = data["data"]["home_search"]["results"]
 
-        dataset = [parse_address(result)
-                   for result in results]
+        for result in results:
+            yield parse_address(result)
 
-        return dataset
-    except (requests.RequestException, requests.ConnectionError, requests.HTTPError, requests.Timeout) as e:
-        return e
+    except (
+            requests.RequestException,
+            requests.ConnectionError,
+            requests.HTTPError,
+            requests.Timeout
+    ) as e:
+        yield e
 
 
 def parse_address(data: dict) -> dict:
@@ -49,10 +61,19 @@ def parse_address(data: dict) -> dict:
     Returns: 
         dict: A dictionary that stores the details of the address.
     """
-    print(data)
     location = data["location"]
     address = location["address"]
     coordinate = address["coordinate"]
+
+    for key, value in address.items():
+        if value is None:
+            address[key] = ""
+
+    if coordinate is None:
+        coordinate = {
+            "lat": 0.0,
+            "lon": 0.0
+        }
 
     details = {
         "city": address["city"],
@@ -68,7 +89,9 @@ def parse_address(data: dict) -> dict:
         "lat": coordinate["lat"],
         "lon": coordinate["lon"]
     }
-    return details
+
+    address = Address(**details)
+    return address
 
 
 def generate_coords(lat, lon):
