@@ -30,20 +30,26 @@ def scraper(args=None):
 
     routines = limit/requests  # the number of routines to run
 
+    offset = requests
+    headerflag = True
     while routines > 0:
         addresses = []
-        for address in fetch_address(state, requests):
+        for address in fetch_address(state, requests, offset=offset):
             addresses.append(address)
 
-        csv_file = generate_csv(addresses)
+        csv_file = generate_csv(addresses, flag=headerflag)
         logger.info(f"Generated {csv_file} with {requests} addresses")
 
         # write csv file to disk
-        with open(f"{state}_{routines}.csv", "a") as f:
+        with open(f"{state}_{limit}.csv", "a") as f:
             content = csv_file.getvalue()
             f.write(content)
+            logger.debug(f"Wrote {requests} addresses to {f.name}")
+            logger.debug(f"\t {content}")
 
         routines -= 1
+        offset += requests
+        headerflag = False
 
 
 if __name__ == "__main__":
