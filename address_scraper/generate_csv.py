@@ -15,7 +15,7 @@ def generate_csv(addresses: list, flag=True) -> StringIO:
 
     try:
         file: StringIO = StringIO()
-        fieldnames: dict.keys = addresses[0].schema()['properties'].keys()
+        fieldnames = addresses[0].schema()["properties"].keys()
     except (IndexError, FileNotFoundError) as e:
         raise e
 
