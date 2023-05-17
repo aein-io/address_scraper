@@ -7,7 +7,6 @@ The module contains the following variable:
 The module contains the following dictionaries:
 - 'payload': Stores the API request payload.
 - 'headers': Stores the API request headers.
-    
 """
 
 url = "https://realty-in-us.p.rapidapi.com/properties/v3/list"
