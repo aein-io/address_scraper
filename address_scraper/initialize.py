@@ -1,52 +1,28 @@
 import argparse
-import logging
+
+MAX_API_REQUESTS = 10000
+MAX_PAYLOAD_TOTAL = 200
 
 
-class Logger:
-    """
-    A logger singleton that has two modes: INFO and DEBUG.
-
-    Attribute:
-        _instance (Logger): instance container for logger singleton
-
-    Returns:
-        Logger: the logger singleton
-    """
-
-    _instance = None
-
-    def __new__(cls, name, logging_level):
-        if not cls._instance:
-            cls._instance = super(Logger, cls).__new__(cls)
-            cls._instance.setup_logger(name, logging_level)
-        return cls._instance
-
-    def setup_logger(self, name, logging_level):
-        self.logger = logging.getLogger(name)
-        self.logger.setLevel(logging_level)
-
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
-
-        # Create a file handler and set the log level
-        file_handler = logging.FileHandler("log_file.log")
-        file_handler.setLevel(logging_level)
-        file_handler.setFormatter(formatter)
-
-        # Create a console handler and set the log level
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging_level)
-        console_handler.setFormatter(formatter)
-
-        # Add the handlers to the logger
-        self.logger.addHandler(file_handler)
-        self.logger.addHandler(console_handler)
-
-
-def setup_args():
+def setup_args(arguments: list[str]) -> argparse.Namespace:
     """
     Defines and returns the arguments required by the scraper.
+
+    Args:
+        list_args (list): List of arguments
+            -s --state (str): State or state code to scrape addresses from
+            -t --total (int): Total number of addresses to scrape
+            -l --limit (int): API request limit per iteration
+            -v --verbose (bool): Whether to log debug messages
+            -m --map (bool): Whether to display the output addresses to a map
+
+    Returns:
+        args: argparse.Namespace with fields:
+            state (str): State or state code to scrape addresses from
+            limit (int): API request limit per iteration
+            total (int): Total number of addresses to scrape
+            verbose (bool): Whether to log debug messages
+            map (bool): Whether to display the output addresses to a map
     """
 
     def positive(numeric_type):
@@ -71,8 +47,6 @@ def setup_args():
 
         return require_positive
 
-    MAXIMUM_API_REQUESTS = 10000
-
     parser = argparse.ArgumentParser(
         description="Scrape addresses from the web given a state or state code"
     )
@@ -91,7 +65,7 @@ def setup_args():
         type=positive(int),
         help="Total number of addresses to scrape",
         required=False,
-        default=MAXIMUM_API_REQUESTS,
+        default=MAX_API_REQUESTS,
     )
 
     parser.add_argument(
@@ -100,7 +74,7 @@ def setup_args():
         type=positive(int),
         help="API request limit per iteration",
         required=False,
-        default=200,
+        default=MAX_PAYLOAD_TOTAL,
     )
 
     parser.add_argument(
@@ -119,14 +93,4 @@ def setup_args():
         required=False,
     )
 
-    # create config dictionary
-    args = parser.parse_args()
-    config = {
-        "state": args.state,
-        "total": args.total,
-        "limit": args.limit,
-        "verbose": args.verbose,
-        "map": args.map,
-    }
-
-    return config
+    return parser.parse_args(arguments)
