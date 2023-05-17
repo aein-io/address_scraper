@@ -1,45 +1,47 @@
 import argparse
 import logging
 
-DEFAULT_LIMIT = 10000
-
-# TODO: @aaron pls add type hints :>
-
 
 class Logger:
     """
-    #TODO: Add summary
+    A logger singleton that has two modes: INFO and DEBUG.
 
     Attribute:
-        _instance (_type_): #TODO: Add type and desc
+        _instance (Logger): instance container for logger singleton
 
     Returns:
-        _type_: #TODO: Add type and desc
+        Logger: the logger singleton
     """
+
     _instance = None
 
-    def __new__(cls, name, level=logging.DEBUG):
+    def __new__(cls, name, logging_level):
         if not cls._instance:
-            cls._instance = super().__new__(cls)
-            cls._instance.logger = logging.getLogger(name)
-            cls._instance.logger.setLevel(level)
-
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-
-            # Create console handler and set level to INFO
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
-            console_handler.setFormatter(formatter)
-            cls._instance.logger.addHandler(console_handler)
-
-            # Create file handler and set level to DEBUG
-            file_handler = logging.FileHandler(f"{name}.log")
-            file_handler.setLevel(logging.DEBUG)
-            file_handler.setFormatter(formatter)
-            cls._instance.logger.addHandler(file_handler)
-
+            cls._instance = super(Logger, cls).__new__(cls)
+            cls._instance.setup_logger(name, logging_level)
         return cls._instance
+
+    def setup_logger(self, name, logging_level):
+        self.logger = logging.getLogger(name)
+        self.logger.setLevel(logging_level)
+
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+
+        # Create a file handler and set the log level
+        file_handler = logging.FileHandler("log_file.log")
+        file_handler.setLevel(logging_level)
+        file_handler.setFormatter(formatter)
+
+        # Create a console handler and set the log level
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging_level)
+        console_handler.setFormatter(formatter)
+
+        # Add the handlers to the logger
+        self.logger.addHandler(file_handler)
+        self.logger.addHandler(console_handler)
 
 
 def setup_args():
@@ -49,33 +51,27 @@ def setup_args():
 
     def positive(numeric_type):
         """
-        #TODO: Add summary
+        Raises a TypeError if input is not positive
 
         Args:
-            numeric_type (_type_): #TODO: Add type and desc
+            numeric_type (float|int): the numeric type to enforce positivity on
+
+        Raises:
+            TypeError: if the number is not positive
 
         Returns:
-            _type_: #TODO: Add type and desc
+            numeric_type: positive numeric type
         """
+
         def require_positive(value):
-            """
-            #TODO: Add summary
-
-            Args:
-                value (_type_): #TODO: Add type and desc
-
-            Raises:
-                TypeError: If #TODO: Complete the statement
-
-            Returns:
-                _type_: #TODO: Add type and desc
-            """
             number = numeric_type(value)
             if number <= 0:
                 raise TypeError(f"Number {value} must be positive.")
             return number
 
         return require_positive
+
+    MAXIMUM_API_REQUESTS = 10000
 
     parser = argparse.ArgumentParser(
         description="Scrape addresses from the web given a state or state code"
@@ -90,18 +86,19 @@ def setup_args():
     )
 
     parser.add_argument(
-        "-l",
-        "--limit",
+        "-t",
+        "--total",
         type=positive(int),
-        help="Number of addresses to scrape",
+        help="Total number of addresses to scrape",
         required=False,
-        default=DEFAULT_LIMIT,
+        default=MAXIMUM_API_REQUESTS,
     )
 
     parser.add_argument(
-        "-r",
-        "--requests", type=positive(int),
-        help="Number of requests per iteration",
+        "-l",
+        "--limit",
+        type=positive(int),
+        help="API request limit per iteration",
         required=False,
         default=200,
     )
@@ -114,4 +111,22 @@ def setup_args():
         required=False,
     )
 
-    return parser.parse_args()
+    parser.add_argument(
+        "-m",
+        "--map",
+        help="Display the output addresses to a map",
+        action="store_true",
+        required=False,
+    )
+
+    # create config dictionary
+    args = parser.parse_args()
+    config = {
+        "state": args.state,
+        "total": args.total,
+        "limit": args.limit,
+        "verbose": args.verbose,
+        "map": args.map,
+    }
+
+    return config
