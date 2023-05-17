@@ -1,5 +1,4 @@
 from address_scraper.address_scraper.fetch_address import fetch_address
-from address_scraper.address_scraper.address import Address
 from address_scraper.address_scraper.payload import url, payload, headers
 from unittest.mock import Mock, patch
 

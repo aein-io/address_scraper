@@ -37,6 +37,7 @@ address = Address(**valid)
 
 
 def test_address():
+
     assert address.city == "San Francisco"
     assert address.line == "1600 Pennsylvania Ave NW"
     assert address.street_name == "Pennsylvania"
@@ -52,9 +53,21 @@ def test_address():
 
 
 def test_address_types():
-    # TODO: @aaron validate address types
     with raises(ValidationError):
         Address(**invalid_types)
+
+    assert type(address.city) == str
+    assert type(address.line) == str
+    assert type(address.street_name) == str
+    assert type(address.street_number) == str
+    assert type(address.street_suffix) == str
+    assert type(address.country) == str
+    assert type(address.postal_code) == str
+    assert type(address.state_code) == str
+    assert type(address.state) == str
+    assert type(address.coordinates) == str
+    assert type(address.lat) == float
+    assert type(address.lon) == float
 
 
 def test_mutability():

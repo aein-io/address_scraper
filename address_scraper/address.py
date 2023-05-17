@@ -35,13 +35,14 @@ class Address(BaseModel):
 
     class Config:
         """
-        Configuration class for #TODO: Complete documentation
+        Configuration class for Address.
 
         Attributes:
-            strict_types (bool): #TODO: Add desc
-            orm_mode (bool): #TODO: Add desc
-            allow_mutation (bool): #TODO: Add desc
+            strict_types (bool): Enforces type checking.
+            orm_mode (bool): Allows for better integration with ORMs.
+            allow_mutation (bool): Enables or disables mutation of data.
         """
+
         strict_types = True
         orm_mode = True
         allow_mutation = False
