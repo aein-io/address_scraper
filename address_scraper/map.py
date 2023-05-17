@@ -5,7 +5,7 @@ import pandas as pd
 from geopy.geocoders import Nominatim
 
 
-def map(filename: str) -> None:
+def map(filename: str, logger) -> None:
     """
     Display the output addresses to a map.
 
@@ -23,10 +23,14 @@ def map(filename: str) -> None:
     map_obj = folium.Map()
 
     # Iterate over the addresses in the DataFrame
+    failed_coords = 0
     for _, row in df.iterrows():
         latitude = row["lat"]
         longitude = row["lon"]
         if latitude == 0 or longitude == 0:
+            logger(
+                f"Invalid coordinates: {row['street_name']}, {latitude}, {longitude}")
+            failed_coords += 1
             continue
 
         coords = f"{latitude}, {longitude}"
@@ -39,5 +43,6 @@ def map(filename: str) -> None:
             popup=address,
         ).add_to(map_obj)
 
+    logger(f"Failed to get coordinates for {failed_coords} addresses.")
     map_obj.save("map.html")
     os.system("open map.html")
