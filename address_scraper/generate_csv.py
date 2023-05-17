@@ -9,6 +9,9 @@ def generate_csv(addresses: list, flag=True) -> StringIO:
     Args:
         addresses (list): List of Address objects.
 
+    Raises:
+        IndexError
+
     Returns:
         A reference to the CSV file generated.
     """
@@ -16,7 +19,7 @@ def generate_csv(addresses: list, flag=True) -> StringIO:
     try:
         file: StringIO = StringIO()
         fieldnames = addresses[0].schema()["properties"].keys()
-    except (IndexError, FileNotFoundError) as e:
+    except IndexError as e:
         raise e
 
     csv_writer: DictWriter = DictWriter(file, fieldnames=fieldnames)

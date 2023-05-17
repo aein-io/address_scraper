@@ -43,7 +43,12 @@ def scraper(config=initialize.setup_args()) -> None:
     while routines > 0:
         addresses = [address for address in fetch_address(state, limit, offset=offset)]
 
-        csv_file = generate_csv(addresses, flag=headerflag)
+        try:
+            csv_file = generate_csv(addresses, flag=headerflag)
+        except IndexError:
+            logger.error("Invalid address")
+            continue
+
         logger.info(f"Generated {csv_file} with {limit} addresses")
 
         # write csv file to disk
