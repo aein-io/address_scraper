@@ -2,6 +2,7 @@ import argparse
 
 MAX_API_REQUESTS = 10000
 MAX_PAYLOAD_LIMIT = 200
+MAX_TIMEOUTS = 10
 
 
 def setup_args(arguments: list[str]) -> argparse.Namespace:

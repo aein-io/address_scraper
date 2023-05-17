@@ -2,7 +2,9 @@ from collections.abc import Generator
 
 import requests
 from address import Address
-from payload import headers, payload, url
+from payload import headers
+from payload import payload
+from payload import url
 
 
 def fetch_address(
@@ -51,7 +53,8 @@ def fetch_address(
         payload["offset"] = offset
 
     try:
-        response: requests.Response = requests.post(url, json=payload, headers=headers)
+        response: requests.Response = requests.post(
+            url, json=payload, headers=headers)
         response.raise_for_status()
 
         data: dict = response.json()

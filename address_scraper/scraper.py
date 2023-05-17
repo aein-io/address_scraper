@@ -54,18 +54,24 @@ def scraper(config=initialize.setup_args(argv[1:])) -> None:
         f.write("")
         logger.debug(f"Removed existing file {f.name}")
 
+    timeout = 0
     while routines > 0:
+        if timeout > initialize.MAX_TIMEOUTS:
+            raise SystemExit(f"timeout limit exceeded after {timeout} tries")
+
         addresses = [address for address in fetch_address(
             state, limit, offset=offset)]
 
+        offset += limit
+
+        logger.info(f"Trying to generate on offset {offset}")
         try:
             csv_file = generate_csv(addresses, flag=headerflag)
-            offset += limit
-            routines -= 1
             headerflag = False
+            routines -= 1
         except IndexError:
-            logger.error("Invalid address")
-            offset += limit
+            logger.error(f"No addresses on offset {offset}")
+            timeout += 1
             continue
 
         logger.info(f"Generated {csv_file} with {limit} addresses")
@@ -73,9 +79,10 @@ def scraper(config=initialize.setup_args(argv[1:])) -> None:
         # write csv file to disk
         with open(filename, "a") as f:
             content = csv_file.getvalue()
+            count = content.count("\n")
+            count -= 1 if headerflag else 0
             f.write(content)
-            logger.debug(f"Wrote {limit} addresses to {f.name}")
-            logger.debug(f"\t {content}")
+            logger.debug(f"Wrote {count} addresses to {f.name}")
 
     if config.map:
         map_csv.map(filename, logger.debug)
