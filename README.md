@@ -35,5 +35,4 @@ It includes the following features:
 -l how many addresses to scrape per API call (max 200) must be less than total | [-l 10]
 -v if provided, debug logging is enabled
 -m if provided, output is mapped to a browser
-
 ```
