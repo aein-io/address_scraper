@@ -55,12 +55,17 @@ def scraper(config=initialize.setup_args(argv[1:])) -> None:
         logger.debug(f"Removed existing file {f.name}")
 
     while routines > 0:
-        addresses = [address for address in fetch_address(state, limit, offset=offset)]
+        addresses = [address for address in fetch_address(
+            state, limit, offset=offset)]
 
         try:
             csv_file = generate_csv(addresses, flag=headerflag)
+            offset += limit
+            routines -= 1
+            headerflag = False
         except IndexError:
             logger.error("Invalid address")
+            offset += limit
             continue
 
         logger.info(f"Generated {csv_file} with {limit} addresses")
@@ -71,10 +76,6 @@ def scraper(config=initialize.setup_args(argv[1:])) -> None:
             f.write(content)
             logger.debug(f"Wrote {limit} addresses to {f.name}")
             logger.debug(f"\t {content}")
-
-        routines -= 1
-        offset += limit
-        headerflag = False
 
     if config.map:
         map_csv.map(filename, logger.debug)
