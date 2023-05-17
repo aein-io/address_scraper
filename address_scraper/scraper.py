@@ -1,32 +1,42 @@
 import logging
+from sys import argv
 
 import initialize
 import map as map_csv
 import validate_state
 from fetch_address import fetch_address
 from generate_csv import generate_csv
+from logger_singleton import Logger
 
 
-def scraper(config=initialize.setup_args()) -> None:
+def scraper(config=initialize.setup_args(argv[1:])) -> None:
     """
     CLI Program that scrapes addresses from the web given a state.
 
     Args:
-        config : Argument list called by argparse. Defaults to None.
+        config (optional): Dictionary of arguments
+            state (str): State or state code to scrape addresses from
+            limit (int): API request limit per iteration
+            total (int): Total number of addresses to scrape
+            verbose (bool): Whether to log debug messages
+            map (bool): Whether to display the output addresses to a map
+
 
     Raises:
         ValueError: if the state or state code is invalid
     """
-
-    logging_level = logging.DEBUG if config["verbose"] else logging.INFO
-    logger = initialize.Logger(__name__, logging_level).logger
-
-    state = validate_state.get_state_code(config["state"])
+    state = validate_state.get_state_code(config.state)
     if not state:
-        raise ValueError("Invalid state or state code")
+        raise SystemExit("Invalid state or state code")
 
-    total: int = config["total"]
-    limit: int = config["limit"]
+    logging_level = logging.DEBUG if config.verbose else logging.INFO
+    logger = Logger(__name__, logging_level).logger
+
+    total: int = config.total
+    limit: int = config.limit
+
+    if limit > total:
+        raise SystemExit("Limit cannot be greater than total")
 
     offset: int = limit
     headerflag: bool = True
@@ -41,7 +51,8 @@ def scraper(config=initialize.setup_args()) -> None:
         logger.debug(f"Removed existing file {f.name}")
 
     while routines > 0:
-        addresses = [address for address in fetch_address(state, limit, offset=offset)]
+        addresses = [address for address in fetch_address(
+            state, limit, offset=offset)]
 
         try:
             csv_file = generate_csv(addresses, flag=headerflag)
@@ -62,8 +73,8 @@ def scraper(config=initialize.setup_args()) -> None:
         offset += limit
         headerflag = False
 
-    if config["map"]:
-        map_csv.map(filename)
+    if config.map:
+        map_csv.map(filename, logger.debug)
 
 
 if __name__ == "__main__":
