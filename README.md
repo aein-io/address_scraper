@@ -1,5 +1,5 @@
 # Address Scraper
-
+![Alt text](address_scraper_banner.png)
 
 ## A Python project that scrapes US addresses and returns it as a CSV file with more functionality!
 
