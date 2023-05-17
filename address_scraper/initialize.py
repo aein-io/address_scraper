@@ -1,7 +1,7 @@
 import argparse
 
 MAX_API_REQUESTS = 10000
-MAX_PAYLOAD_TOTAL = 200
+MAX_PAYLOAD_LIMIT = 200
 
 
 def setup_args(arguments: list[str]) -> argparse.Namespace:
@@ -74,7 +74,7 @@ def setup_args(arguments: list[str]) -> argparse.Namespace:
         type=positive(int),
         help="API request limit per iteration",
         required=False,
-        default=MAX_PAYLOAD_TOTAL,
+        default=MAX_PAYLOAD_LIMIT,
     )
 
     parser.add_argument(
