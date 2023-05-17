@@ -1,6 +1,7 @@
-from address_scraper.address_scraper.address import Address
 from pydantic import ValidationError
 from pytest import raises
+
+from address_scraper.address_scraper.address import Address
 
 valid = {
     "city": "San Francisco",
@@ -37,7 +38,6 @@ address = Address(**valid)
 
 
 def test_address():
-
     assert address.city == "San Francisco"
     assert address.line == "1600 Pennsylvania Ave NW"
     assert address.street_name == "Pennsylvania"
@@ -71,7 +71,6 @@ def test_address_types():
 
 
 def test_mutability():
-
     with raises(TypeError):
         address.city = "New York"
     with raises(TypeError):

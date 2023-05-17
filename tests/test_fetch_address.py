@@ -1,6 +1,7 @@
-from address_scraper.address_scraper.fetch_address import fetch_address
-from address_scraper.address_scraper.payload import url, payload, headers
 from unittest.mock import Mock, patch
+
+from address_scraper.address_scraper.fetch_address import fetch_address
+from address_scraper.address_scraper.payload import headers, payload, url
 
 
 def test_fetch_address():
@@ -21,7 +22,7 @@ def test_fetch_address():
             "state": "Texas",
             "coordinates": "32.395367,-100.863693",
             "lat": 32.395367,
-            "lon": -100.863693
+            "lon": -100.863693,
         },
         {
             "city": "Canyon",
@@ -35,8 +36,8 @@ def test_fetch_address():
             "state": "Texas",
             "coordinates": "34.977005,-101.91490967",
             "lat": 34.977005,
-            "lon": -101.91490967
-        }
+            "lon": -101.91490967,
+        },
     ]
 
     mock_response = Mock()
@@ -56,10 +57,7 @@ def test_fetch_address():
                                 "postal_code": "79512",
                                 "state_code": "TX",
                                 "state": "Texas",
-                                "coordinate": {
-                                        "lat": 32.395367,
-                                        "lon": -100.863693
-                                }
+                                "coordinate": {"lat": 32.395367, "lon": -100.863693},
                             }
                         }
                     },
@@ -75,13 +73,10 @@ def test_fetch_address():
                                 "postal_code": "79015",
                                 "state_code": "TX",
                                 "state": "Texas",
-                                "coordinate": {
-                                        "lat": 34.977005,
-                                        "lon": -101.91490967
-                                }
+                                "coordinate": {"lat": 34.977005, "lon": -101.91490967},
                             }
                         }
-                    }
+                    },
                 ]
             }
         }
@@ -92,7 +87,6 @@ def test_fetch_address():
         # convert address object to dict
         result = [address.dict() for address in result]
 
-        mock_post.assert_called_once_with(
-            url, json=payload, headers=headers)
+        mock_post.assert_called_once_with(url, json=payload, headers=headers)
 
         assert result == expected_result

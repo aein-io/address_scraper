@@ -5,6 +5,7 @@ description = "This Python project scrapes US addresses from an API."
 authors = ["Aaron Nicholas Gumapac <aarn.gmpc@gmail.com>", "Aeinnor Reyes <aaeinnor11@gmail.com>"]
 readme = "README.md"
 packages = [{include = "address_scraper"}]
+exclude = [ "tests", "tests.*" ]
 
 [tool.poetry.dependencies]
 python = "^3.10"

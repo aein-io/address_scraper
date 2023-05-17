@@ -7,22 +7,23 @@ from address_scraper.address_scraper.generate_csv import generate_csv
 
 
 def generate_test_dataset(count=1):
-
-    t_dataset = [Address(
-        city="city",
-        line="line",
-        street_name="street_name",
-        street_number="street_number",
-        street_suffix="street_suffix",
-        country="country",
-        postal_code="postal_code",
-        state_code="state_code",
-        state="state",
-        coordinates="coordinates",
-        lat=0.0,
-        lon=0.0,
-
-    ) for _ in range(count)]
+    t_dataset = [
+        Address(
+            city="city",
+            line="line",
+            street_name="street_name",
+            street_number="street_number",
+            street_suffix="street_suffix",
+            country="country",
+            postal_code="postal_code",
+            state_code="state_code",
+            state="state",
+            coordinates="coordinates",
+            lat=0.0,
+            lon=0.0,
+        )
+        for _ in range(count)
+    ]
     t_csv = generate_csv(t_dataset)
     return t_csv
 
@@ -41,7 +42,6 @@ def test_generate_csv():
 
 
 def test_csv_iswritten():
-
     t_csv = generate_test_dataset()
 
     assert t_csv.writable() is True
@@ -57,7 +57,6 @@ def test_csv_iswritten():
 
 
 def test_written_csv():
-
     headers = [
         "city",
         "line",
@@ -70,7 +69,7 @@ def test_written_csv():
         "state",
         "coordinates",
         "lat",
-        "lon"
+        "lon",
     ]
 
     def test_line_count(file, count):

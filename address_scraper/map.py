@@ -29,7 +29,8 @@ def map(filename: str, logger) -> None:
         longitude = row["lon"]
         if latitude == 0 or longitude == 0:
             logger(
-                f"Invalid coordinates: {row['street_name']}, {latitude}, {longitude}")
+                f"Invalid coordinates: {row['street_name']}, {latitude}, {longitude}"
+            )
             failed_coords += 1
             continue
 

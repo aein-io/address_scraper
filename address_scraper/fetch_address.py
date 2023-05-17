@@ -2,9 +2,7 @@ from collections.abc import Generator
 
 import requests
 from address import Address
-from payload import headers
-from payload import payload
-from payload import url
+from payload import headers, payload, url
 
 
 def fetch_address(

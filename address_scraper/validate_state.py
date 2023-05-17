@@ -9,8 +9,7 @@ def is_camel(s: str) -> bool:
 def split_camel(s: str) -> str:
     import re
 
-    strings = re.sub('([A-Z][a-z]+)', r' \1',
-                     re.sub('([A-Z]+)', r' \1', s)).split()
+    strings = re.sub("([A-Z][a-z]+)", r" \1", re.sub("([A-Z]+)", r" \1", s)).split()
 
     return " ".join(strings)
 

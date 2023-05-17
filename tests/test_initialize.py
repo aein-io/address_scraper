@@ -1,8 +1,8 @@
 from pytest import raises
 
-from address_scraper.address_scraper.initialize import MAX_API_REQUESTS
-from address_scraper.address_scraper.initialize import MAX_PAYLOAD_LIMIT
-from address_scraper.address_scraper.initialize import setup_args
+from address_scraper.address_scraper.initialize import (MAX_API_REQUESTS,
+                                                        MAX_PAYLOAD_LIMIT,
+                                                        setup_args)
 
 
 def test_setup_args():

@@ -55,8 +55,7 @@ def scraper(config=initialize.setup_args(argv[1:])) -> None:
         logger.debug(f"Removed existing file {f.name}")
 
     while routines > 0:
-        addresses = [address for address in fetch_address(
-            state, limit, offset=offset)]
+        addresses = [address for address in fetch_address(state, limit, offset=offset)]
 
         try:
             csv_file = generate_csv(addresses, flag=headerflag)
