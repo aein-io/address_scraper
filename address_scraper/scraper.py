@@ -3,10 +3,10 @@ from sys import argv
 
 import initialize
 import map as map_csv
-import validate_state
 from fetch_address import fetch_address
 from generate_csv import generate_csv
 from logger_singleton import Logger
+from validate_state import get_state_code
 
 
 def scraper(config=initialize.setup_args(argv[1:])) -> None:
@@ -25,7 +25,7 @@ def scraper(config=initialize.setup_args(argv[1:])) -> None:
     Raises:
         ValueError: if the state or state code is invalid
     """
-    state = validate_state.get_state_code(config.state)
+    state = get_state_code(config.state)
     if not state:
         raise SystemExit("Invalid state or state code")
 
@@ -37,6 +37,10 @@ def scraper(config=initialize.setup_args(argv[1:])) -> None:
 
     if limit > total:
         raise SystemExit("Limit cannot be greater than total")
+    if limit > initialize.MAX_PAYLOAD_LIMIT:
+        raise SystemExit("Total cannot be greater than 200")
+    if total > initialize.MAX_API_REQUESTS:
+        raise SystemExit("Total cannot be greater than 10000")
 
     offset: int = limit
     headerflag: bool = True
