@@ -1,66 +1,64 @@
-
 import logging
 
+import initialize
+import map as map_csv
+import validate_state
 from fetch_address import fetch_address
 from generate_csv import generate_csv
 
-import initialize
-import validate_state
 
-# TODO: Tanggalin ba to
-# Path: address_scraper/scraper.py
-
-
-def scraper(args=None):
+def scraper(config=initialize.setup_args()) -> None:
     """
     CLI Program that scrapes addresses from the web given a state.
 
     Args:
-        #TODO: Add type and desc
-        args (_type_, optional): _description_. Defaults to None.
+        config : Argument list called by argparse. Defaults to None.
 
     Raises:
-        #TODO: Add desc
-        ValueError: _description_
+        ValueError: if the state or state code is invalid
     """
 
-    if not args:
-        args = initialize.setup_args()
-
-    logging_level = logging.DEBUG if args.verbose else logging.INFO
+    logging_level = logging.DEBUG if config["verbose"] else logging.INFO
     logger = initialize.Logger(__name__, logging_level).logger
 
-    state = validate_state.get_state_code(args.state)
+    state = validate_state.get_state_code(config["state"])
     if not state:
         raise ValueError("Invalid state or state code")
 
-    requests: int = args.requests
-    limit: int = args.limit
+    total: int = config["total"]
+    limit: int = config["limit"]
 
-    routines = limit/requests  # the number of routines to run
-
-    offset: int = requests
+    offset: int = limit
     headerflag: bool = True
 
-    logger.info(f"Scraping {state} for {requests} addresses")
-    while routines > 0:
+    routines = total / limit  # the number of routines to run
+    logger.info(f"Scraping {state} for {limit} addresses")
+    filename = f"{state}_{total}.csv"
 
-        addresses = [address for address in fetch_address(
-            state, requests, offset=offset)]
+    # remove any existing files named filename
+    with open(filename, "w") as f:
+        f.write("")
+        logger.debug(f"Removed existing file {f.name}")
+
+    while routines > 0:
+        addresses = [address for address in fetch_address(state, limit, offset=offset)]
 
         csv_file = generate_csv(addresses, flag=headerflag)
-        logger.info(f"Generated {csv_file} with {requests} addresses")
+        logger.info(f"Generated {csv_file} with {limit} addresses")
 
         # write csv file to disk
-        with open(f"{state}_{limit}.csv", "a") as f:
+        with open(filename, "a") as f:
             content = csv_file.getvalue()
             f.write(content)
-            logger.debug(f"Wrote {requests} addresses to {f.name}")
+            logger.debug(f"Wrote {limit} addresses to {f.name}")
             logger.debug(f"\t {content}")
 
         routines -= 1
-        offset += requests
+        offset += limit
         headerflag = False
+
+    if config["map"]:
+        map_csv.map(filename)
 
 
 if __name__ == "__main__":
