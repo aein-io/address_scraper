@@ -24,5 +24,4 @@ It includes the following features:
 
 ## Usage instructions
 1. Run ``` poetry install ``` in the directory of the project.
-2. Run ``` poetry shell ```.
-3. Run the project using ``` python address_scraper/scraper.py ``` to see the usage.
+2. Run the project using ``` python address_scraper/scraper.py ``` to see the usage.
